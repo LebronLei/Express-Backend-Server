@@ -42,6 +42,8 @@ router.post('/getTemplateList', function (req, res, next) {
         }
         // data = JSON.stringify(data);
         console.log(data)
+
+        // render方法  ：渲染 html 视图，所以返回的是html模板
         // res.render('index', {
         //     title: data
         // });
