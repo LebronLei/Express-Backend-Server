@@ -33,40 +33,52 @@ router.post('/get_task_list', function (req, res, next) {
 
     // 获取参数
     var query = req.body;
-    console.log("post请求：参数", query);
-
-    var sql = "SELECT t.taskno,t.task_name,t.task_type,t.enabled,t.startime,t.endtime FROM crawl_task t";
-    var selectTaskName = " WHERE task_name LIKE '%" + query.taskName + "%'";
-    console.log(2222, query.taskName)
+    console.log("post请求：参数", query, 123123);
 
 
-    // 列表查询
-    if (query.taskName) {
-        // sql += String(selectTaskName);
-        sql = "SELECT t.taskno,t.task_name,t.task_type,t.enabled,t.startime,t.endtime FROM crawl_task t " + selectTaskName;
-        console.log('sql', sql)
-    }
-    mysql.query(sql, function (err, val) {
-        var resData;
-        // if (err) {
-        //     resData = {
-        //         data: val,
-        //         status: {
-        //             code: 10,
-        //             message: 'fail'
-        //         }
-        //     }
-        // } else {
-        resData = {
-            data: val,
-            status: {
-                code: 0,
-                message: 'success'
-            }
-        }
-        // }
-        res.json(resData)
+    // 分页
+    myUnits.pagination('crawl_task', query.page_num, query.page_size, function (pagination) {
+        get_list(pagination);
     })
+
+
+
+    function get_list(pagination) {
+        // 列表查询
+        var sql = "SELECT t.taskno,t.task_name,t.task_type,t.enabled,t.startime,t.endtime FROM crawl_task t limit " + (query.page_num - 1) * query.page_size + "," + query.page_size + " ";
+        var selectTaskName = " WHERE task_name LIKE '%" + query.taskName + "%'";
+        // console.log(2222, query.taskName)
+
+        if (query.taskName) {
+            sql = "SELECT t.taskno,t.task_name,t.task_type,t.enabled,t.startime,t.endtime FROM crawl_task t " + selectTaskName;
+            console.log('sql', sql)
+        }
+        mysql.query(sql, function (err, val, fields) {
+            // console.log('fields', fields)
+            var resData;
+            if (err) {
+
+                resData = {
+                    data: err,
+                    status: {
+                        code: 10,
+                        message: 'fail'
+                    }
+                }
+            } else {
+                resData = {
+                    pagination: pagination,
+                    data: val,
+                    status: {
+                        code: 0,
+                        message: 'success'
+                    }
+                }
+            }
+            res.json(resData)
+        })
+
+    }
 });
 
 
@@ -84,7 +96,7 @@ router.post('/add_task_list', function (req, res, next) {
     //     console.log(item + '---' + index);
     // });
 
-    JSON.parse(query.templateList).forEach(function (val, key) {
+    JSON.parse(query.templateList).forEach(function (err, val, key) {
         console.log(val, key)
 
     });
@@ -132,4 +144,89 @@ router.post('/add_task_list', function (req, res, next) {
         res.json(resData)
     })
 });
+
+
+// 任务列表的 停止或启用
+router.post('/task_stop_or_start', function (req, res, next) {
+    // 获取参数
+    var query = req.body;
+    console.log("post请求：参数", query);
+    var sql = "UPDATE crawl_task SET enabled=" + query.enabled + " WHERE taskno= " + query.taskno + "";
+    mysql.query(sql, function (err, val, fields) {
+        var resData;
+        if (err) {
+            resData = {
+                data: err,
+                status: {
+                    code: 10,
+                    message: 'fail'
+                }
+            }
+        } else {
+            resData = {
+                status: {
+                    code: 0,
+                    message: 'success'
+                }
+            }
+        }
+        res.json(resData)
+    })
+});
+
+
+
+// 任务列表的 删除
+
+// router.post('/task_list_delete', function (req, res, next) {
+//     // 获取参数
+//     var query = req.body;
+//     console.log("post请求：参数", query);
+//     // var sql = "start transaction";
+//     mysql.query('start transaction', function (err, val, fields) {
+//         console.log(1111, err, val)
+
+//     })
+//     mysql.query("UPDATE crawl_task SET note=123123123 WHERE taskno= " + query.taskno + "", function (err, val) {
+//         console.log(err, val)
+//         if (err) {
+
+//        }
+//     })
+// });
+
+
+
+
+
+
+router.post('/task_list_delete', function (req, res, next) {
+    // 获取参数
+    var query = req.body;
+    console.log("post请求：参数", query);
+    var sql = "DELETE FROM crawl_task  WHERE taskno= " + query.taskno + "";
+    mysql.query(sql, function (err, val, fields) {
+        var resData;
+        if (err) {
+            resData = {
+                data: err,
+                status: {
+                    code: 10,
+                    message: 'fail'
+                }
+            }
+        } else {
+            resData = {
+                status: {
+                    code: 0,
+                    message: 'success'
+                }
+            }
+        }
+        res.json(resData)
+    })
+});
+
+
+
 module.exports = router;

@@ -44,7 +44,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/task', taskRouter);
 
 // 解析cookie
-var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 // 引入json解析中间件

@@ -19,19 +19,19 @@ db.query = function sqlback(sqllan, fn) {
     if (!sql) return;
     console.log('mysql connect success')
     connection.query(sql, function (err, rows, fields) {
-        var resData;
-        if (err) {
-            resData = {
-                data: val,
-                status: {
-                    code: 10,
-                    message: 'fail'
-                }
-            }
-            res.json(resData)
-            return;
-        };
-        fn(rows, fields);
+        // var resData;
+        // if (err) {
+        //     resData = {
+        //         data: err,
+        //         status: {
+        //             code: 10,
+        //             message: 'fail'
+        //         }
+        //     }
+        //     res.json(resData)
+        //     return;
+        // };
+        fn(err, rows, fields);
 
     });
 
