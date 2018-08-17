@@ -183,79 +183,79 @@ router.post('/task_stop_or_start', function (req, res, next) {
 
 // 任务列表的 删除
 
-router.post('/task_list_delete', function (req, res, next) {
-    // 获取参数
-    var query = req.body;
-    console.log("post请求：参数", query);
-    // var sql = "start transaction";
-
-    var resData;
-
-
-    mysql.query('START TRANSACTION', function (err, val, fields) {
-        console.log(111, err)
-        mysql.query("UPDATE crawl_task SET note='Affddbb' WHERE taskno= " + query.taskno + "", function (err, val) {
-
-            console.log(222, err)
-            mysql.query('ROLLBACK ', function (err, val, fields) {
-                console.log(333, err)
-            })
-
-
-        })
-
-    })
-    // try {
-    //     // one;
-    // } catch (err) {
-    //     console.log('fail')
-    //     // rollback
-    // } finally {
-    //     console.log('success-----------------')
-    //     // three
-    //     resData = {
-    //         status: {
-    //             code: 0,
-    //             message: 'success'
-    //         }
-    //     }
-    //     res.json(resData)
-
-
-    // }
-});
-
-
-
-
-
-
 // router.post('/task_list_delete', function (req, res, next) {
 //     // 获取参数
 //     var query = req.body;
 //     console.log("post请求：参数", query);
-//     var sql = "DELETE FROM crawl_task  WHERE taskno= " + query.taskno + "";
-//     mysql.query(sql, function (err, val, fields) {
-//         var resData;
-//         if (err) {
-//             resData = {
-//                 data: err,
-//                 status: {
-//                     code: 10,
-//                     message: 'fail'
-//                 }
-//             }
-//         } else {
-//             resData = {
-//                 status: {
-//                     code: 0,
-//                     message: 'success'
-//                 }
-//             }
-//         }
-//         res.json(resData)
+//     // var sql = "start transaction";
+
+//     var resData;
+
+
+//     mysql.query('START TRANSACTION', function (err, val, fields) {
+//         console.log(111, err)
+//         mysql.query("UPDATE crawl_task SET note='Affddbb' WHERE taskno= " + query.taskno + "", function (err, val) {
+
+//             console.log(222, err)
+//             mysql.query('ROLLBACK ', function (err, val, fields) {
+//                 console.log(333, err)
+//             })
+
+
+//         })
+
 //     })
+//     // try {
+//     //     // one;
+//     // } catch (err) {
+//     //     console.log('fail')
+//     //     // rollback
+//     // } finally {
+//     //     console.log('success-----------------')
+//     //     // three
+//     //     resData = {
+//     //         status: {
+//     //             code: 0,
+//     //             message: 'success'
+//     //         }
+//     //     }
+//     //     res.json(resData)
+
+
+//     // }
 // });
+
+
+
+
+
+
+router.post('/task_list_delete', function (req, res, next) {
+    // 获取参数
+    var query = req.body;
+    console.log("post请求：参数", query);
+    var sql = "DELETE FROM crawl_task  WHERE taskno= " + query.taskno + "";
+    mysql.query(sql, function (err, val, fields) {
+        var resData;
+        if (err) {
+            resData = {
+                data: err,
+                status: {
+                    code: 10,
+                    message: 'fail'
+                }
+            }
+        } else {
+            resData = {
+                status: {
+                    code: 0,
+                    message: 'success'
+                }
+            }
+        }
+        res.json(resData)
+    })
+});
 
 
 
