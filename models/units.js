@@ -11,8 +11,9 @@ var myUnits = {
     },
 
     // 封装的分页方法
-    pagination: function (tableName, pageNum, pageSize, callback) {
-        var pagaSql = "select count(*) as count from " + tableName;
+    pagination: function (tableName, pageNum, pageSize, condition, callback) {
+        var pageSql = condition.indexOf('undefined') == -1 ? "select count(*) as count from " + tableName + condition : "select count(*) as count from " + tableName;
+        console.log('-----------', condition.indexOf('undefined') == -1, pageSql)
         var pagination = {
             all_count: '',
             page_num: Number(pageNum),
@@ -20,7 +21,7 @@ var myUnits = {
             page_size: Number(pageSize),
         }
 
-        mysql.query(pagaSql, function (err, val, fields) {
+        mysql.query(pageSql, function (err, val, fields) {
 
             if (err) {
                 resData = {

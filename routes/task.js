@@ -7,10 +7,15 @@ var router = express.Router();
 //     extended: false
 // })
 
+//普通连接 
 var mysql = require('../models/mysql');
-var myUnits = require('../models/units');
-// console.log('mysql---', mysql.query)
 
+// 连接池
+var mysqlPool = require('../models/mysqlPool');
+
+var myUnits = require('../models/units');
+// 
+console.log('mysql--------------')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -33,11 +38,11 @@ router.post('/get_task_list', function (req, res, next) {
 
     // 获取参数
     var query = req.body;
-    console.log("post请求：参数", query, 123123);
+    console.log("post请求：参数", query, query.taskName);
 
 
     // 分页
-    myUnits.pagination('crawl_task', query.page_num, query.page_size, function (pagination) {
+    myUnits.pagination('crawl_task', query.page_num, query.page_size, " WHERE task_name LIKE '%" + query.taskName + "%'", function (pagination) {
         get_list(pagination);
     })
 
@@ -50,7 +55,7 @@ router.post('/get_task_list', function (req, res, next) {
         // console.log(2222, query.taskName)
 
         if (query.taskName) {
-            sql = "SELECT t.taskno,t.task_name,t.task_type,t.enabled,t.startime,t.endtime FROM crawl_task t " + selectTaskName;
+            sql = "SELECT t.taskno,t.task_name,t.task_type,t.enabled,t.startime,t.endtime FROM crawl_task t " + selectTaskName + " limit " + (query.page_num - 1) * query.page_size + "," + query.page_size + " ";
             console.log('sql', sql)
         }
         mysql.query(sql, function (err, val, fields) {
@@ -178,54 +183,79 @@ router.post('/task_stop_or_start', function (req, res, next) {
 
 // 任务列表的 删除
 
-// router.post('/task_list_delete', function (req, res, next) {
-//     // 获取参数
-//     var query = req.body;
-//     console.log("post请求：参数", query);
-//     // var sql = "start transaction";
-//     mysql.query('start transaction', function (err, val, fields) {
-//         console.log(1111, err, val)
-
-//     })
-//     mysql.query("UPDATE crawl_task SET note=123123123 WHERE taskno= " + query.taskno + "", function (err, val) {
-//         console.log(err, val)
-//         if (err) {
-
-//        }
-//     })
-// });
-
-
-
-
-
-
 router.post('/task_list_delete', function (req, res, next) {
     // 获取参数
     var query = req.body;
     console.log("post请求：参数", query);
-    var sql = "DELETE FROM crawl_task  WHERE taskno= " + query.taskno + "";
-    mysql.query(sql, function (err, val, fields) {
-        var resData;
-        if (err) {
-            resData = {
-                data: err,
-                status: {
-                    code: 10,
-                    message: 'fail'
-                }
-            }
-        } else {
-            resData = {
-                status: {
-                    code: 0,
-                    message: 'success'
-                }
-            }
-        }
-        res.json(resData)
+    // var sql = "start transaction";
+
+    var resData;
+
+
+    mysql.query('START TRANSACTION', function (err, val, fields) {
+        console.log(111, err)
+        mysql.query("UPDATE crawl_task SET note='Affddbb' WHERE taskno= " + query.taskno + "", function (err, val) {
+
+            console.log(222, err)
+            mysql.query('ROLLBACK ', function (err, val, fields) {
+                console.log(333, err)
+            })
+
+
+        })
+
     })
+    // try {
+    //     // one;
+    // } catch (err) {
+    //     console.log('fail')
+    //     // rollback
+    // } finally {
+    //     console.log('success-----------------')
+    //     // three
+    //     resData = {
+    //         status: {
+    //             code: 0,
+    //             message: 'success'
+    //         }
+    //     }
+    //     res.json(resData)
+
+
+    // }
 });
+
+
+
+
+
+
+// router.post('/task_list_delete', function (req, res, next) {
+//     // 获取参数
+//     var query = req.body;
+//     console.log("post请求：参数", query);
+//     var sql = "DELETE FROM crawl_task  WHERE taskno= " + query.taskno + "";
+//     mysql.query(sql, function (err, val, fields) {
+//         var resData;
+//         if (err) {
+//             resData = {
+//                 data: err,
+//                 status: {
+//                     code: 10,
+//                     message: 'fail'
+//                 }
+//             }
+//         } else {
+//             resData = {
+//                 status: {
+//                     code: 0,
+//                     message: 'success'
+//                 }
+//             }
+//         }
+//         res.json(resData)
+//     })
+// });
 
 
 

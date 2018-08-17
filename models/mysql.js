@@ -9,7 +9,7 @@ db.query = function sqlback(sqllan, fn) {
         port: '3306',
     });
     connection.connect(function (err) {
-        console.log('connection', err)
+        // console.log('connection', err)
         if (err) {
             console.log(err);
             return;
@@ -39,7 +39,7 @@ db.query = function sqlback(sqllan, fn) {
         if (err) {
             return;
         } else {
-            console.log('connection close')
+            // console.log('connection close')
         }
     });
 }
