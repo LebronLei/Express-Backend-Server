@@ -65,19 +65,19 @@ router.post('/get_task_list', function (req, res, next) {
 
                 resData = {
                     data: err,
-                    status: {
-                        code: 10,
-                        message: 'fail'
-                    }
+                    // status: {
+                    code: 10,
+                    message: 'fail'
+                    // }
                 }
             } else {
                 resData = {
                     pagination: pagination,
                     data: val,
-                    status: {
-                        code: 0,
-                        message: 'success'
-                    }
+                    // status: {
+                    code: 0,
+                    message: 'success'
+                    // }
                 }
             }
             res.json(resData)
@@ -132,18 +132,18 @@ router.post('/add_task_list', function (req, res, next) {
         if (err) {
             resData = {
                 data: val,
-                status: {
-                    code: 10,
-                    message: 'fail'
-                }
+                // status: {
+                code: 10,
+                message: 'fail'
+                // }
             }
         } else {
             resData = {
                 data: val,
-                status: {
-                    code: 0,
-                    message: 'success'
-                }
+                // status: {
+                code: 0,
+                message: 'success'
+                // }
             }
         }
         res.json(resData)
@@ -162,17 +162,17 @@ router.post('/task_stop_or_start', function (req, res, next) {
         if (err) {
             resData = {
                 data: err,
-                status: {
-                    code: 10,
-                    message: 'fail'
-                }
+                // status: {
+                code: 10,
+                message: 'fail'
+                // }
             }
         } else {
             resData = {
-                status: {
-                    code: 0,
-                    message: 'success'
-                }
+                // status: {
+                code: 0,
+                message: 'success'
+                // }
             }
         }
         res.json(resData)
@@ -240,17 +240,17 @@ router.post('/task_list_delete', function (req, res, next) {
         if (err) {
             resData = {
                 data: err,
-                status: {
-                    code: 10,
-                    message: 'fail'
-                }
+                // status: {
+                code: 10,
+                message: 'fail'
+                // }
             }
         } else {
             resData = {
-                status: {
-                    code: 0,
-                    message: 'success'
-                }
+                // status: {
+                code: 0,
+                message: 'success'
+                // }
             }
         }
         res.json(resData)
